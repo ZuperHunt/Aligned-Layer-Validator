@@ -1,57 +1,137 @@
-Penulis: [nama_penulis](link_twt)
+Penulis: [Naufal](https://twitter.com/0xfal)
 
 # Pengenalan
-Bab ini berisi pengenalan mengenai nama_project
-
-## Nama_Project
 > [!NOTE]
-> berikan_description_singkat_mengenai_project_tersebut
+> Aligned Layer adalah ZK _verification layer_ yang dibangun di atas EigenLayer, memungkinkan verifikasi yang hemat biaya untuk SNARK _proof_, memanfaatkan keamanan _validator_ Ethereum tanpa limitasi Ethereum.
 
 ### Investor
-taroh_img_investor_jika_ada
+![image](https://github.com/ZuperHunt/Aligned-Layer-Validator/assets/80172679/855d8f6f-ae2b-40ac-b387-6210ff970450)
 
-# Tutorial XXX
-Bab ini berisi tutorial cara menjalankan XXX
+# Tutorial _Validator Node_
+Bab ini berisi tutorial cara menjalankan _validator node_.
 
-## Requirement
-Syarat menjalankan XXX
-- Spek Komputer
-  
-| Name | Minimum |
-| ------------- | ------------- |
-| Operating System  | OS_NAME  |
-| CPU  | X Cores  |
-| RAM  | X GB  |
-| SSD  | XX GB  |
-- item_2_dan_seterusnya_jika_ada
+## _Requirements_
+Yang diperlukan untuk menjalankan _validator node_:
 
-> [!TIP]
-> Kami menggunakan Digital Ocean dengan speksifikasi `XX/ X Core/ X GB RAM/ XX GB SSD`. Jika kamu membutuhkan VPS, kami memiliki link gratis credit VPS DigitalOcean sebesar $200. Cukup untuk menjalankan XXX selama XX . Daftar sekarang dengan [link utama](link_reff_do_kamu) / [link cadangan](link_reff_do_2_kamu) untuk mendapatkannya.
-  
-## Dependencies
+Komputer dengan spesifikasi:
 
-### Install X 
+| ✅ Linux | ✅ macOS | ✅ Windows (Native / WSL) |
+| ------------- | ------------- | ------------- |
+
+| Part | Minimum | Recommended |
+| ------------- | ------------- | ------------- |
+| CPU | - | 4 Core |
+| RAM | - | 16 GB |
+| SSD | - | 160 GB |
+
+Tutorial ini dibuat menggunakan sistem operasi Linux (Ubuntu), untuk sistem operasi lainnya mungkin akan sedikit berbeda ([cek referensi](https://github.com/ZuperHunt/Aligned-Layer-Validator#acknowledgments)).
+
+## _Dependencies_
+Yang perlu dilakukan sebeleum menjalankan _validator node_:
+
+### Instalasi `Go`
 ```
-sudo apt-get install xxxx
+wget https://go.dev/dl/go1.22.1.linux-amd64.tar.gz
+```
+Konfigurasi _environment_ / _profile_:
+```
+rm -rf /$HOME/go && tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz
+export PATH=$PATH:/$HOME/go/bin
 ```
 
-## Menjalankan XXX
+### Instalasi `Rust`
+```
+curl https://sh.rustup.rs -sSf | sh
+```
+Konfigurasi _environment_ / _profile_:
+```
+source "$HOME/.cargo/env"
+```
 
-### Run XXX
+### Instalasi `Ignite CLI`
 ```
-code blocks for commands
+curl https://get.ignite.com/cli! | bash
+sudo curl https://get.ignite.com/cli | sudo bash
+sudo mv ignite /usr/local/bin/
 ```
+
+### Instalasi `Make`
+```
+sudo apt install make
+```
+
+## Menjalankan _Validator Node_
+
+### Buat `tmux`
+```
+tmux
+```
+
+### _Clone Repository_
+```
+git clone https://github.com/yetanotherco/aligned_layer_tendermint.git
+cd aligned_layer_tendermint
+```
+
+### Pengaturan _Node_
+Ubah `<your-node-name>` menjadi terserahmu.
+```
+make clean
+export PEER_ADDR=91.107.239.79,116.203.81.174,88.99.174.203,128.140.3.188
+bash setup_node.sh <your-node-name>
+```
+
+### Jalankan _Node_
+```
+alignedlayerd start
+```
+
+> [!CAUTION]
+> **WARNING!!!** JANGAN _TERMINATE_ TERMINAL YANG LAGI _RUNNING NODE_ UNTUK MELANJUTKAN KE STEP SELANJUTNYA, BUAT/SPLIT TMUX BARU atau TERMINAL BARU.
+
+### Buat Akun Aligned Layer
+Ubah `<account-name>` menjadi terserahmu.
+
+Simpan _output_ yang dihasilkan dari menjalankan command ini, _copy address_ `alignedxxxx` mu untuk klaim _faucet_.
+```
+alignedlayerd keys add <account-name>
+```
+
+### Klaim _Faucet_
+_Paste address_ `alignedxxxx` mu di [AlignedLayer Faucet](https://faucet.alignedlayer.com), klik _Request Tokens_.
+![image](https://github.com/ZuperHunt/Aligned-Layer-Validator/assets/80172679/2c7231a2-427e-4c5b-8dd6-c565ab1023b7)
+
+### Cek _Balance_
+Memastikan kalau _faucet_-nya berhasil masuk ke akunmu, wajib punya _balance_ untuk di-_stake_ jadi _validator_.
+
+Ubah `<account-address-or-name>` menjadi sesuai akunmu yang sudah dibuat sebelumnya.
+```
+alignedlayerd query bank balances <account-address-or-name>
+```
+
+### Registrasi _Validator_
+Ubah `<account-address-or-name>` menjadi sesuai akunmu yang sudah dibuat sebelumnya.
+```
+bash setup_validator.sh <account-name-or-address> 1050000stake
+```
+
+### Cek _Validator_
+Cek apakah _validator_ mu sudah muncul di [explorer Alignedlayer](https://explorer.alignedlayer.com/alignedlayer/uptime), dan pastikan normal.
+![image](https://github.com/ZuperHunt/Aligned-Layer-Validator/assets/80172679/fb019f6c-5771-411e-ae80-7213fa2c321a)
 
 ## Help
 
-Join komunitas [Discord ZuperHunt](https://t.co/n7TeWVlA48) jika kamu ada pertanyaan.
+_Join_ komunitas [Discord ZuperHunt](https://t.co/n7TeWVlA48) jika kamu ada pertanyaan.
+
+_Follow_ [GitHub ZuperHunt](https://github.com/ZuperHunt) dan [X(Twitter) ZuperHunt](https://twitter.com/ZuperHunt)
 
 ## Change Logs
 
 * 0.0.1
-    * Initial Release
+  * _Initial release_
 
 ## Acknowledgments
 
 Referensi
-* [nama_referensi](link_referensi)
+* [_Joining Our Testnet_](https://github.com/yetanotherco/aligned_layer_tendermint#joining-our-testnet)
+* [tmux _cheatsheet_](https://quickref.me/tmux.html)
